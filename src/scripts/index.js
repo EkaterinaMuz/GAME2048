@@ -8,8 +8,8 @@ import endGame from './endGame';
 
 export default function createGame() {
   const gameBoard = document.querySelector('.game-board');
-  const grid = new Grid(gameBoard, GRID_SIZE);
-  grid.randomEmptyCell().tile = new Tile(gameBoard);
+  const grid = new Grid(gameBoard, GRID_SIZE); // создаем игровое поле
+  grid.randomEmptyCell().tile = new Tile(gameBoard); // добавляем первых 2 квадрата
   grid.randomEmptyCell().tile = new Tile(gameBoard);
   setUpGame();
 
@@ -54,11 +54,11 @@ export default function createGame() {
         setUpGame();
         return;
     }
-    grid.cells.forEach((cell) => cell.mergeTiles(grid.cells));
-    grid.randomEmptyCell().tile = new Tile(gameBoard);
+    grid.cells.forEach((cell) => cell.mergeTiles(grid.cells)); // после нажатия на стрелку сохраняем value квадрата
+    grid.randomEmptyCell().tile = new Tile(gameBoard); // добавляем новый квадрат
 
     if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-      endGame('lost');
+      endGame('lost'); // если невозможно совершить действие ни в одну сторону - вы проиграли
     }
     setUpGame();
   }
@@ -67,15 +67,13 @@ export default function createGame() {
     return slideTiles(grid.ColumnCells);
   }
   function moveDown() {
-    return slideTiles(grid.ColumnCells.map((column) => [...column].reverse()));
+    return slideTiles(grid.ColumnCells.map((column) => column.reverse()));
   }
   function moveLeft() {
-    console.log('left');
     return slideTiles(grid.RowCells);
   }
   function moveRight() {
-    console.log('right');
-    return slideTiles(grid.RowCells.map((row) => [...row].reverse()));
+    return slideTiles(grid.RowCells.map((row) => row.reverse()));
   }
 
   slideTiles(grid.cells);
@@ -84,20 +82,20 @@ export default function createGame() {
     return canMove(grid.ColumnCells);
   }
   function canMoveDown() {
-    return canMove(grid.ColumnCells.map((column) => [...column].reverse()));
+    return canMove(grid.ColumnCells.map((column) => column.reverse()));
   }
   function canMoveLeft() {
     return canMove(grid.RowCells);
   }
   function canMoveRight() {
-    return canMove(grid.RowCells.map((row) => [...row].reverse()));
+    return canMove(grid.RowCells.map((row) => row.reverse()));
   }
 
   function canMove(cells) {
     return cells.some((cellGroup) => {
-      return cellGroup.some((cell, index) => {
-        if (cell.tile == null) return false;
-        if (index === 0) return false;
+      return cellGroup.some((cell, index) => { // проходимся по 2-мерному массиву
+        if (cell.tile == null) return false; 
+        if (index === 0) return false; // если квадарат на 0 индексе - находится на краю борда - движение невозможно
         const moveToCell = cellGroup[index - 1];
         return moveToCell.canAccept(cell.tile);
       });

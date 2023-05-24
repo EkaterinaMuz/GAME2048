@@ -6,14 +6,14 @@ export default function updateScore(cells) {
     null,
     cells
       .flat()
-      .filter((cell) => cell.tile != null)
+      .filter((cell) => cell.tile != null) // находим непустые клетки
       .reduce((acc, cell) => {
         acc.push(cell?.tile?.value);
         return acc;
-      }, [])
+      }, []) // сохраняем их значения в массив и находим большее
   );
   gameScore.textContent = score;
-  if (score === 1024) {
+  if (score === 2048) {
     endGame('won');
   }
 }

@@ -16,7 +16,8 @@ export default class Tile {
 
   set value(value) {
     this.#value = value;
-    this.#tileElement.textContent = value;
+    this.#tileElement.textContent = value; // добавляем значение квадрата
+    //в зависимости от числа квадрата меняем цвет его фона и самой цифры
     const number = Math.log2(value);
     const backgroundLightness = 100 - number * 9;
     this.#tileElement.style.setProperty('--background-lightness', `${backgroundLightness}%`);
