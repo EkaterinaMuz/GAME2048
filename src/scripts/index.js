@@ -1,5 +1,6 @@
 import '../style.css';
 import './startGame';
+import 'hammerjs';
 import { GRID_SIZE } from './startGame';
 import Grid from './Grid';
 import Tile from './Tile';
@@ -17,8 +18,14 @@ export default function createGame() {
     window.addEventListener('keydown', handlePlay, { once: true });
   }
 
-  async function handlePlay(e) {
-    switch (e.key) {
+  const hammerManager = new Hammer.Manager(document.body, {
+    recognizers: [[Hammer.Swipe, { direction: Hammer.DIRECTION_ALL }]],
+  });
+  const swipe = new Hammer.Swipe();
+  hammerManager.add(swipe);
+
+  async function handlePlay(e, swipe) {
+    switch (e?.key || swipe) {
       case 'ArrowUp':
         if (!canMoveUp()) {
           setUpGame();
@@ -93,12 +100,29 @@ export default function createGame() {
 
   function canMove(cells) {
     return cells.some((cellGroup) => {
-      return cellGroup.some((cell, index) => { // проходимся по 2-мерному массиву
-        if (cell.tile == null) return false; 
+      return cellGroup.some((cell, index) => {
+        // проходимся по 2-мерному массиву
+        if (cell.tile == null) return false;
         if (index === 0) return false; // если квадарат на 0 индексе - находится на краю борда - движение невозможно
         const moveToCell = cellGroup[index - 1];
         return moveToCell.canAccept(cell.tile);
       });
     });
   }
+
+  // Создаем управление с мобильных устровств через свайп
+  hammerManager.on('swipe', function (e) {
+    const direction = e.offsetDirection;
+    if (direction === 2) {
+      handlePlay(null, 'ArrowLeft');
+    } else if (direction === 4) {
+      console.log('right');
+      handlePlay(null, 'ArrowRight');
+    } else if (direction === 8) {
+      console.log('up');
+      handlePlay(null, 'ArrowUp');
+    } else if (direction === 16) {
+      handlePlay(null, 'ArrowDown');
+    }
+  });
 }

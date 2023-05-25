@@ -63,9 +63,9 @@ export class Cell {
   }
 
   set tile(value) {
-    this.#tile = value;
+    this.#tile = value; // экземпляр от class Tile
     if (value === null) return;
-    this.#tile.x = this.#x;
+    this.#tile.x = this.#x; // принимает координаты текущей клетки
     this.#tile.y = this.#y;
   }
 
@@ -81,13 +81,13 @@ export class Cell {
   }
 
   canAccept(tile) {
-    return this.tile == null || (this.mergeTile == null && this.tile.value === tile.value);
-  }
+    return this.tile == null || (this.mergeTile == null && this.tile.value === tile.value); 
+  } // если следующиая клетка не занята или значения 2 квадратов совпадают + еще не было совершено слияния (т. е. 1 мердж за раз)
 
   mergeTiles(cells) {
     if (this.tile == null || this.mergeTile == null) return;
     this.#tile.value += this.#mergeTile.value;
-    updateScore(cells);
+    updateScore(cells); // после слиния 2 квадратов, проверяем счет
     this.#mergeTile.remove();
     this.#mergeTile = null;
   }
@@ -99,7 +99,7 @@ function createCellElement(gridElement, GRID_SIZE) {
     const cell = document.createElement('div');
     cell.classList.add('cell');
     cells.push(cell);
-    gridElement.append(cell);
+    gridElement.append(cell); // наполняем игровой боард
   }
   return cells;
 }
