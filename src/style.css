@@ -85,7 +85,7 @@ body {
         top: 5%;
         right: 5%;
         content: '';
-        background-image: url(./img/keyboard-arrows.png);
+        background-image: url('assets/keyboard-arrows.png');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: 60% 100%;

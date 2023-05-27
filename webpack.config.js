@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    assetModuleFilename: 'assets/[name][ext][query]',
   },
   devServer: {
     port: 3000,
@@ -29,10 +30,10 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      {
-        test: /\.(jpg|png)$/,
-        use: ['file-loader'],
-      },
+      // {
+      //   test: /\.(png|jpg)$/,
+      //   type: 'asset/resource',
+      // },
       {
         test: /\.js$/,
         exclude: /node_modules/,
